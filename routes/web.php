@@ -77,7 +77,7 @@ Route::prefix('/client')->group(function(){
 
 Route::prefix('/user')->group(function(){
     Route::get('list', [UserController::class, 'list'])->name('user.list')->middleware('auth');
-    Route::get('register', [UserController::class, 'create'])->name('register')->middleware('auth');
+    Route::get('register', [UserController::class, 'create'])->name('register');
     Route::post('store', [UserController::class, 'store'])->name('store_user')->middleware('auth');
     Route::get('login', [UserController::class, 'login'])->name('login');
     Route::post('login-store', [UserController::class, 'loginStore'])->name('login.store');
