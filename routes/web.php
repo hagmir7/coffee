@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\Controllers\AgenceController;
-use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\ContratEController;
-use App\Http\Controllers\ContratOController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductImagesController;
 use App\Http\Controllers\UserController;
-use App\Models\Agence;
-use App\Models\Client;
+use App\Models\Category;
 use App\Models\Contact;
-use App\Models\ContratE;
-use App\Models\ContratO;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\ProductImages;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use Carbon\Carbon;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,56 +24,67 @@ use App\Models\User;
 |
 */
 
+function getOrderCounts()
+{
+
+}
+
 Route::get('/', function () {
-    return view('index');
+    return view('index', [
+        'categories' => Category::paginate(6),
+        'products' => Product::paginate(30)
+    ]);
 });
 
-Route::get('/payment', function () {
-    return view('payment');
-});
 
 
 Route::get('/dashboard', function(){
+
+
+    $today = Order::whereDate('created_at', Carbon::today())->count();
+    $yesterday = Order::whereDate('created_at', Carbon::yesterday())->count();
+    $lastSevenDays = Order::where('created_at', '>=', Carbon::now()->subDays(7))->count();
+    $thisMonth = Order::whereYear('created_at', Carbon::now()->year)
+                      ->whereMonth('created_at', Carbon::now()->month)
+                      ->count();
+
+
     return view('dashboard',[
-        'clients' => Client::query()->count(),
-        'contacts' => Contact::query()->count(),
-        'agences' => Agence::query()->count(),
-        'electresitiare' => ContratE::query()->count(),
-        'eau' => ContratO::query()->count(),
-        'admins' => User::query()->count(),
+        'contacts' => Contact::all(),
+        'users' => User::all(),
+        'orders' => Order::all(),
+        'products' => Product::all(),
+        'categories' => Category::all(),
+        'today' => $today,
+        'yesterday' => $yesterday,
+        'last7Days' => $lastSevenDays,
+        'thisMonth' => $thisMonth,
     ]);
-
-
 })->name('dashboard')->middleware('auth');
 
 
-Route::prefix('/agence')->group(function(){
-    Route::get('', [AgenceController::class, 'list'])->name('agence.list');
-    Route::get('list', [AgenceController::class, 'adminList'])->name('agence.list.admin')->middleware('auth');
-    Route::get('create', [AgenceController::class, 'create'])->name('agence.create')->middleware('auth');
-    Route::post('store', [AgenceController::class, 'store'])->name('agence.store')->middleware('auth');
-    Route::get('show/{agence}', [AgenceController::class, 'show'])->name('agence.show');
-    Route::get('delete/{agence}', [AgenceController::class, 'delete'])->name('agence.delete')->middleware('auth');
-});
 
+Route::prefix('/product')->group(function(){
+    Route::get('create', [ProductController::class, 'create'])->name('product.create')->middleware('auth');
+    Route::get('list', [ProductController::class, 'list'])->name('product.list');
+    Route::get('{product}', [ProductController::class, 'product'])->name('product');
+    Route::get('list/admin', [ProductController::class, 'listAdmin'])->name('product.list.admin')->middleware('auth');
+    Route::post('store', [ProductController::class, 'store'])->name('product.store')->middleware('auth');
+    Route::get('update/{product}', [ProductController::class, 'update'])->name('product.update')->middleware('auth');
+    Route::put('update/store{product}', [ProductController::class, 'updateStore'])->name('product.update.store')->middleware('auth');
+    Route::get('delete/{product}', [ProductController::class, 'delete'])->name('product.delete')->middleware('auth');
+});
 
 
 Route::prefix('/contact')->group(function(){
     Route::get('', [ContactController::class, 'create'])->name('contact.create');
     Route::get('list', [ContactController::class, 'list'])->name('contact.list')->middleware('auth');
-
     Route::post('store', [ContactController::class, 'store'])->name('contact.store')->middleware('auth');
     Route::get('show/{contact}', [ContactController::class, 'show'])->name('contact.show');
 });
 
 
-Route::prefix('/client')->group(function(){
-    Route::get('create', [ClientController::class, 'create'])->name('client.create');
-    Route::get('', [ClientController::class, 'list'])->name('client.list');
-    Route::get('delete/{client}', [ClientController::class, 'delete'])->name('client.delete');
-    Route::post('store', [ClientController::class, 'store'])->name('client.store');
-    Route::get('show/{client}', [ClientController::class, 'show'])->name('client.show');
-})->middleware('auth');
+
 
 Route::prefix('/user')->group(function(){
     Route::get('list', [UserController::class, 'list'])->name('user.list')->middleware('auth');
@@ -86,22 +97,30 @@ Route::prefix('/user')->group(function(){
 });
 
 
-Route::prefix('/contrat/o')->group(function(){
-    Route::get('create', [ContratOController::class, 'create'])->name('contrat.o.create');
-    Route::get('list', [ContratOController::class, 'list'])->name('contrat.o.list');
-    Route::get('delete/{contrat_o}', [ContratOController::class, 'delete'])->name('contrat.o.delete');
-    Route::post('store', [ContratOController::class, 'store'])->name('contrat.o.store');
-    Route::get('show/{contrat_o}', [ContratOController::class, 'show'])->name('client.show');
-})->middleware('auth');
+Route::prefix('/category')->group(function(){
+    Route::get('create', [CategoryController::class, 'create'])->name('category.create')->middleware('auth');
+    Route::get('list', [CategoryController::class, 'list'])->name('category.list');
+    Route::get('{category}', [CategoryController::class, 'category'])->name('category');
+    Route::get('list/admin', [CategoryController::class, 'listAdmin'])->name('category.list.admin')->middleware('auth');
+    Route::post('store', [CategoryController::class, 'store'])->name('category.store')->middleware('auth');
+    Route::get('update/{category}', [CategoryController::class, 'update'])->name('category.update')->middleware('auth');
+    Route::put('update/store/{category}', [CategoryController::class, 'updateStore'])->name('category.update.store')->middleware('auth');
+    Route::get('delete/{category}', [CategoryController::class, 'delete'])->name('category.delete')->middleware('auth');
+});
 
 
-Route::prefix('/contrat/e')->group(function(){
-    Route::get('create', [ContratEController::class, 'create'])->name('contrat.e.create');
-    Route::get('list', [ContratEController::class, 'list'])->name('contrat.e.list');
-    Route::get('delete/{contrat_e}', [ContratEController::class, 'delete'])->name('contrat.e.delete');
-    Route::post('store', [ContratEController::class, 'store'])->name('contrat.e.store');
-    Route::get('show/{contrat_e}', [ContratEController::class, 'show'])->name('client.show');
-})->middleware('auth');
+Route::prefix('/image')->group(function(){
+    Route::get('delete/{image}', [ProductImagesController::class, 'delete'])->name('image.delete');
+    Route::get('list', [ProductImagesController::class, 'list'])->name('image.list');
+});
+
+
+
+
+
+
+
+
 
 
 

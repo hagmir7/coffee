@@ -9,7 +9,7 @@ class ContactController extends Controller
 {
     public function list(){
         return view('contact.list', [
-            'contacts' => Contact::all()
+            'contacts' => Contact::paginate(30)
         ]);
     }
 
@@ -37,7 +37,7 @@ class ContactController extends Controller
 
         ]);
 
-        return redirect()->route('contact.list')->with('message', "Le message a été envoyer avec succès.");
+        return redirect('/')->with('message', "Le message a été envoyer avec succès.");
         
         
     }

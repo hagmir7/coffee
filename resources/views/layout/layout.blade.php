@@ -9,7 +9,7 @@
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="/assets/img/bilouar.png" rel="icon">
+    <link href="/assets/img/coffee.png" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,7 +62,7 @@
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 px-4 px-lg-5 border-bottom">
         <a href="/" class="navbar-brand d-flex align-items-center">
-            <h2 class="m-0 text-primary"><img class="img-fluid me-2" src="/assets/img/bilouar.png" alt=""
+            <h2 class="m-0 text-primary"><img class="img-fluid me-2" src="/assets/img/coffee.png" alt=""
                     style="width: 45px;"></h2>
         </a>
         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -71,12 +71,18 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-4 py-lg-0">
                 <a href="/" class="nav-item nav-link active">Home</a>
-                <a href="/categoris" class="nav-item nav-link">Categories</a>
-                <a href="/products" class="nav-item nav-link">Products</a>
+                <a href="{{ route('product.list') }}" class="nav-item nav-link">Products</a>
+                <a href="{{ route('category.list') }}" class="nav-item nav-link">Categories</a>
                 <a href="/contact" class="nav-item nav-link">Contatct Us</a>
             </div>
-            <a href="{{ route('login')}} " class="btn btn-outline-primary mx-2">Login</a>
-            <a href="{{ route('register')}} " class="btn btn-primary">Register</a>
+            @auth
+            <a href="{{ route('dashboard')}} " class="btn rounded-pill btn-outline-primary mx-2">Dashboars</a>
+            @else
+            <a href="{{ route('login')}} " class="btn rounded-pill btn-outline-primary mx-2">Login</a>
+            @endauth
+
+
+
         </div>
     </nav>
     <!-- Navbar End -->
@@ -89,22 +95,24 @@
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-md-6">
-                    <h1 class="text-primary mb-4"><img class="img-fluid me-2" src="/assets/img/bilouar.png" alt=""
-                            style="width: 45px;"><span class="mt-2">BILOUAR New Coffee</span></h1>
+                    <h1 class="text-primary mb-4 d-flex">
+                        <img class="img-fluid me-2" src="/assets/img/coffee.png" alt="" style="width: 45px;">
+                        <span class="mt-2">BILOUAR New Coffee</span>
+                    </h1>
                     <span>
                         BILOUAR New Coffee, we pride ourselves on our expertly crafted coffee blends. Our signature
                         blend features beans from Colombia and Ethiopia, resulting in a medium roast coffee with a
                         balanced flavor profile. With notes of chocolate and caramel, our coffee has a sweet aroma that
                         will tantalize your senses. The full-bodied taste of our coffee is complemented by a subtle
-                        nuttiness and a smooth finish
+                        nuttiness and a smooth finish.
                     </span>
                 </div>
                 <div class=" col-md-3">
                     <h5 class="mb-4">Quick links</h5>
                     <a class="btn btn-link" href="/">Home</a>
-                    <a class="btn btn-link" href="/products">Products</a>
-                    <a class="btn btn-link" href="/categories">Categories</a>
-                    <a class="btn btn-link" href="/contact">Contact</a>
+                    <a class="btn btn-link" href="{{ route('product.list') }}">Products</a>
+                    <a class="btn btn-link" href="{{ route("category.list") }}">Categories</a>
+                    <a class="btn btn-link" href="{{ route("contact.create") }}">Contact</a>
                 </div>
                 <div class="col-md-3">
                     <h5 class="mb-4">Suivez-nous</h5>
@@ -114,6 +122,12 @@
                         <a>
                         <a class="btn btn-square rounded-circle me-1" href="#">
                             <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a class="btn btn-square rounded-circle me-1" href="#">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a class="btn btn-square rounded-circle me-1" href="#">
+                            <i class="fab fa-youtube"></i>
                         </a>
                     </div>
                 </div>

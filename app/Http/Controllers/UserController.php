@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,9 @@ class UserController extends Controller
 
 
     public function create(){
-        return view('user.register');
+        return view('user.register',[
+            'roles' => Role::all()
+        ]);
     }
 
 
@@ -31,6 +34,7 @@ class UserController extends Controller
                 "last_name" => 'required|string|max:100',
                 "email" => 'required|string|max:100',
                 "password" => 'required|string|max:100',
+                "role" => 'required',
                 'password_1' => 'required'
             ]); 
 
@@ -39,6 +43,7 @@ class UserController extends Controller
                 "first_name" => $request->input('first_name'),
                 "last_name" => $request->input('last_name'),
                 "email" => $request->input('email'),
+                "role_id" => $request->input('role'),
                 "password" => Hash::make($request->password),
                 "token" => Str::random(40),
             ]);
