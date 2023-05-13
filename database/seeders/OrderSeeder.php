@@ -13,13 +13,13 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
-        Order::create(["creator" => 2, "server" => 3]);
-        Order::create(["creator" => 2, "server" => 3]);
-        Order::create(["creator" => 2, "server" => 3]);
-        Order::create(["creator" => 2, "server" => 3]);
-        Order::create(["creator" => 2, "server" => 4]);
-        Order::create(["creator" => 2, "server" => 4]);
-        Order::create(["creator" => 2, "server" => 4]);
-        Order::create(["creator" => 2, "server" => 4]);
+        Order::create(["creator_id" => 2, "server_id" => 3]);
+        Order::create(["creator_id" => 2, "server_id" => 3]);
+        Order::create(["creator_id" => 2, "server_id" => 3]);
+        Order::create(["creator_id" => 2, "server_id" => 3]);
+        Order::create(["creator_id" => 2, "server_id" => 4]);
+        Order::create(["creator_id" => 2, "server_id" => 4]);
+        Order::create(["creator_id" => 2, "server_id" => 4]);
+        Order::create(["creator_id" => 2, "server_id" => 4]);
     }
 }

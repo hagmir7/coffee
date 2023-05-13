@@ -9,7 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['creator', 'server', 'total', 'status'];
+    protected $fillable = ['creator_id', 'server_id', 'total', 'status'];
 
 
     public function details(){
@@ -24,4 +24,14 @@ class Order extends Model
         }
         return $total;
     }
+
+    public function server()
+    {
+        return $this->hasOne(User::class, 'id', 'server_id');
+    } 
+
+    public function manager()
+    {
+        return $this->hasOne(User::class, 'id', 'creator_id');
+    } 
 }

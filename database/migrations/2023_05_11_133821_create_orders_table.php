@@ -14,10 +14,10 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class, 'creator');
-            $table->foreignIdFor(User::class, 'server');
+            $table->foreignIdFor(User::class, 'creator_id');
+            $table->foreignIdFor(User::class, 'server_id');
             $table->float('total')->default(0);
-            $table->boolean('status')->default(true);
+            $table->boolean('status')->nullable()->default(null);
             $table->timestamps();
         });
     }

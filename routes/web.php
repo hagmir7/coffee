@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImagesController;
 use App\Http\Controllers\UserController;
@@ -10,6 +11,7 @@ use App\Models\Contact;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductImages;
+use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Carbon\Carbon;
@@ -59,6 +61,7 @@ Route::get('/dashboard', function(){
         'yesterday' => $yesterday,
         'last7Days' => $lastSevenDays,
         'thisMonth' => $thisMonth,
+        "servers" => Role::where('name', 'SERVER')->first()->users
     ]);
 })->name('dashboard')->middleware('auth');
 
@@ -113,6 +116,16 @@ Route::prefix('/image')->group(function(){
     Route::get('delete/{image}', [ProductImagesController::class, 'delete'])->name('image.delete');
     Route::get('list', [ProductImagesController::class, 'list'])->name('image.list');
 });
+
+
+
+Route::prefix('/order')->group(function(){
+    Route::post('create', [OrderController::class, 'create'])->name('order.create');
+    Route::get('list', [OrderController::class, 'list'])->name('order.list')->middleware('auth');
+    Route::post('valid', [OrderController::class, 'valid'])->name('order.valid')->middleware('auth');
+    Route::get('{order}', [OrderController::class, 'show'])->name('order.show');
+});
+
 
 
 

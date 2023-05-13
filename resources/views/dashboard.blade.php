@@ -52,6 +52,41 @@
         <h5>Categories</h5>
         <h4><i class="bi bi-tags"></i> {{ $categories->count() }}</h4>
     </div>
+
+    <div class="col-12 d-flex justify-content-center p-3">
+        <a href="#!" data-bs-toggle="modal" data-bs-target="#order">
+            <div class="rounded-pill card py-4 px-5" style="background-color: #37517e;">
+                <h3 class="text-white p-0 m-0"><i class="bi bi-patch-plus"></i></h3>
+            </div>
+        </a>
+    </div>
 </div>
+  
+  <!-- Modal -->
+  <div class="modal" id="order" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="orderLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="orderLabel">Select Server</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ route('order.create') }}" method="POST">
+            @csrf
+            <select name="server_id" id="" class="form-select" required>
+                <option value="">Select Server</option>
+                @foreach ($servers as $server)
+                    <option value="{{ $server->id }}">{{ $server->first_name }} {{ $server->last_name }}</option>
+                @endforeach
+            </select>
+            <button class="btn btn-success w-100 mt-2">Select and Create</button>
+        </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 @endsection
