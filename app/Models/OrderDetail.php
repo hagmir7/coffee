@@ -10,7 +10,7 @@ class OrderDetail extends Model
     use HasFactory;
 
 
-    protected $fillable = ['order_id', 'porduct_id', 'totla', 'quantity'];
+    protected $fillable = ['order_id', 'product_id', 'totla', 'quantity'];
 
     public function order(){
         return $this->belongsTo(Order::class, 'order_id');
@@ -23,11 +23,9 @@ class OrderDetail extends Model
     protected static function booted()
     {
         static::created(function ($model) {
-            $model->total = floatval($model->quantity) * floatval($model->product->price);
+            $model->total = $model->quantity * $model->product->price;
+            $model->save();
         });
 
-        static::updated(function ($model) {
-            $model->total = floatval($model->quantity) * floatval($model->product->price);
-        });
     }
 }

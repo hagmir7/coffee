@@ -74,7 +74,7 @@ class ProductController extends Controller
 
     public function delete(Product $product){
         $product->delete();
-        return redirect()->route('product.list.admin')->with(['message' => 'Product deleted successfully.']);
+        return redirect()->back()->with(['message' => "Product deleted successfully."]);
     }
 
 
@@ -84,7 +84,7 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'description' => 'required|string',
             'category_id' => 'required|exists:categories,id',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048' // validate each image
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048' // validate each image
         ]);
 
 
@@ -102,7 +102,7 @@ class ProductController extends Controller
                 ]);
             }
         }
-
+        
         return redirect()->route('product', $product->id)->with(['message' => 'Product updated successfully.']);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Table;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class, 'creator_id');
             $table->foreignIdFor(User::class, 'server_id');
-            $table->float('total')->default(0);
+            $table->foreignIdFor(Table::class, 'table_id');
             $table->boolean('status')->nullable()->default(null);
             $table->timestamps();
         });

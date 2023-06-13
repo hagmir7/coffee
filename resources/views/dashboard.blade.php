@@ -79,6 +79,13 @@
                     <option value="{{ $server->id }}">{{ $server->first_name }} {{ $server->last_name }}</option>
                 @endforeach
             </select>
+
+            <select name="table_id" id="" class="form-select mt-3" required>
+                <option value="">Select Table Number</option>
+                @foreach ($tables as $table)
+                    <option value="{{ $table->id }}">{{ $table->id }}</option>
+                @endforeach
+            </select>
             <button class="btn btn-success w-100 mt-2">Select and Create</button>
         </form>
         </div>

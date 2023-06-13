@@ -9,7 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['creator_id', 'server_id', 'total', 'status'];
+    protected $fillable = ['creator_id', 'server_id', 'total', 'status', 'table_id'];
 
 
     public function details(){
@@ -18,11 +18,10 @@ class Order extends Model
 
 
     public function getTotal(){
-        $total = 0;
-        foreach($this->details as $item){
-            $total += $item->total;
-        }
-        return $total;
+        $prices = $this->details->map(function ($item) {
+            return $item->total;
+        });
+        return array_sum($prices->all());
     }
 
     public function server()

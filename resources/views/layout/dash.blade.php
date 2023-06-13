@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-  	<title>Sidebar 04</title>
+  	<title></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -35,7 +35,14 @@
             <a class="p-2" href="{{ route('category.list.admin') }}"> Categories</a>
           </li>
           <li>
-            <a class="p-2" href=""> Orders</a>
+            <a class="p-2" href="{{ route('order.list') }}"> Orders</a>
+          </li>
+
+          <li>
+            <a class="p-2" href="{{ route('table.list') }}"> Tables</a>
+          </li>
+          <li>
+            <a class="p-2" href="{{ route('user.server.list') }}"> Servers</a>
           </li>
           <li>
             <a class="p-2" href="{{ route('user.list') }}"> Users</a>
@@ -47,7 +54,6 @@
             <a class="p-2" href="{{ route('logout') }}"> Logout</a>
           </li>
         </ul>
-
     	</nav>
       
 

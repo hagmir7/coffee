@@ -84,6 +84,13 @@ class UserController extends Controller
         return redirect('/');
     }
 
+    public function servers()
+    {
+        return view('user.servers-list', [
+            'users' => Role::where('name', "Server")->first()->users
+        ]);
+    }
+
 
 
     public function delete(User $user){

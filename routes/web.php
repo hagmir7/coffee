@@ -5,6 +5,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImagesController;
+use App\Http\Controllers\TableController;
 use App\Http\Controllers\UserController;
 use App\Models\Category;
 use App\Models\Contact;
@@ -12,6 +13,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductImages;
 use App\Models\Role;
+use App\Models\Table;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Carbon\Carbon;
@@ -61,7 +63,8 @@ Route::get('/dashboard', function(){
         'yesterday' => $yesterday,
         'last7Days' => $lastSevenDays,
         'thisMonth' => $thisMonth,
-        "servers" => Role::where('name', 'SERVER')->first()->users
+        "servers" => Role::where('name', 'SERVER')->first()->users,
+        "tables" => Table::all()
     ]);
 })->name('dashboard')->middleware('auth');
 
@@ -96,6 +99,7 @@ Route::prefix('/user')->group(function(){
     Route::get('login', [UserController::class, 'login'])->name('login');
     Route::post('login-store', [UserController::class, 'loginStore'])->name('login.store');
     Route::get('logout', [UserController::class, 'logout'])->name('logout');
+    Route::get('servers', [UserController::class, 'servers'])->name('user.server.list');
     Route::get('delete/{user}', [UserController::class, 'delete'])->name('user.delete')->middleware('auth');
 });
 
@@ -122,8 +126,21 @@ Route::prefix('/image')->group(function(){
 Route::prefix('/order')->group(function(){
     Route::post('create', [OrderController::class, 'create'])->name('order.create');
     Route::get('list', [OrderController::class, 'list'])->name('order.list')->middleware('auth');
-    Route::post('valid', [OrderController::class, 'valid'])->name('order.valid')->middleware('auth');
+    Route::get('valid/{order}', [OrderController::class, 'valid'])->name('order.valid')->middleware('auth');
+    Route::get('cancel/{order}', [OrderController::class, 'cancel'])->name('order.cancel')->middleware('auth');
     Route::get('{order}', [OrderController::class, 'show'])->name('order.show');
+    Route::get('delete/{order}', [OrderController::class, 'delete'])->name('order.delete');
+    Route::post('add/{order}/{product}', [OrderController::class, 'orderItem'])->name('order.add');
+    Route::get('invoice/{order}', [OrderController::class, 'invoice'])->name('order.invoice')->middleware('auth');
+});
+
+
+Route::prefix('/table')->group(function(){
+    Route::get('create', [TableController::class, 'create'])->name('table.create')->middleware('auth');
+    Route::post('store', [TableController::class, 'store'])->name('table.store')->middleware('auth');
+    Route::get('list', [TableController::class, 'list'])->name('table.list')->middleware('auth');
+    Route::post('update', [TableController::class, 'update'])->name('table.update')->middleware('auth');
+    Route::get('delete/{table}', [TableController::class, 'delete'])->name('table.delete');
 });
 
 
